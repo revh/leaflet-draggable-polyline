@@ -1,0 +1,21 @@
+{
+  "name": "leaflet-draggable-polyline",
+  "main": "leaflet-draggable-polyline.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/RevH/leaflet-draggable-polyline",
+  "authors": [
+    "Lorenzo Greco <lorenzo.rev@gmail.com>"
+  ],
+  "keywords": [
+    "leaflet"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ]
+}
