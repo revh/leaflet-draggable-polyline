@@ -4,9 +4,9 @@ L.EditDrag.Polyline = L.Handler.extend({
 
   options: {
     distance: 30,
-    icon: new L.Icon({
-      iconSize: [11, 11],
-      iconUrl: './editmarker.png'
+    icon: new L.DivIcon({
+      iconSize: new L.Point(8, 8),
+      className: 'leaflet-div-icon leaflet-editing-icon'
     })
   },
 
@@ -59,9 +59,9 @@ L.EditDrag.Polyline = L.Handler.extend({
 
     this.closest = L.GeometryUtil.closest(this._map, this._poly, marker.getLatLng(), true);
 
-    //imposto una tolleranza di 5
+    //set a tollerance of 5
     if (this.closest.distance > 5) {
-      //per prima cosa troviamo il segmento AB più vicino al punto cliccato
+      //search the closest segment from the marker
       var distanceMin = Infinity;
       var segmentMin = null;
 
@@ -75,7 +75,7 @@ L.EditDrag.Polyline = L.Handler.extend({
         }
       }
 
-      //dopo aver ottenuto il segmento più vicino a dove ho cliccato trovo il punto perpendicolare al segmento
+      //locate the closest point on the closest segment
       var closestPoint = L.GeometryUtil.closestOnSegment(this._map, marker.getLatLng(), segmentMin[0], segmentMin[1]);
 
       var insertAt = this._poly._latlngs.indexOf(segmentMin[0])+1;
