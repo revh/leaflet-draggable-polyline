@@ -19,18 +19,12 @@ L.EditDrag.Polyline = L.Handler.extend({
   addHooks: function() {
     if (this._poly._map) {
       this._map = this._poly._map;
-      this._map.on('mouseover', this._mouseOver, this);
+      this._map.on('mousemove', this._mouseMove, this);
     }
   },
 
   removeHooks: function() {
-    this._map.off('mouseover');
-    this._map.removeLayer(this._marker);
-  },
-
-
-  _mouseOver: function(e) {
-    this._map.on('mousemove', this._mouseMove, this);
+    this._map.off('mousemove');
   },
 
   _mouseContextClick: function(e) {
@@ -40,7 +34,7 @@ L.EditDrag.Polyline = L.Handler.extend({
   },
 
   _mouseMove: function(e) {
-    var closest = this.getClosest(e.latlng);
+    var closest = L.GeometryUtil.closestLayerSnap(this._map, [this._poly], e.latlng, this.options.distance, false);
 
     if (this._marker) {
       if (closest) {
@@ -99,12 +93,6 @@ L.EditDrag.Polyline = L.Handler.extend({
 
   _markerDragEnd: function(e) {
     this._map.on('mousemove', this._mouseMove, this);
-  },
-
-  getClosest: function (latlng) {
-    var snapfunc = L.GeometryUtil.closestLayerSnap,
-        distance = this.options.distance;
-    return snapfunc(this._map, [this._poly], latlng, distance, false);
   }
 });
 
