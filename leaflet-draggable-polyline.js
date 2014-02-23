@@ -33,6 +33,12 @@ L.EditDrag.Polyline = L.Handler.extend({
     this._map.on('mousemove', this._mouseMove, this);
   },
 
+  _mouseContextClick: function(e) {
+    var closestPoint = L.GeometryUtil.closest(this._map, this._poly, e.target.getLatLng(), true);
+    this._poly._latlngs.splice(this._poly._latlngs.indexOf(closestPoint), 1);
+    this._poly.redraw();
+  },
+
   _mouseMove: function(e) {
     var closest = this.getClosest(e.latlng);
 
@@ -49,9 +55,9 @@ L.EditDrag.Polyline = L.Handler.extend({
       this._marker = L.marker(closest.latlng, { draggable: true, icon: this.options.icon }).addTo(this._map);
       this._marker.on('dragstart', this._markerDragStart, this);
       this._marker.on('drag', this._markerDrag, this);
+      this._marker.on('contextmenu', this._mouseContextClick, this);
       this._marker.on('dragend', this._markerDragEnd, this);
     }
-
   },
 
   _markerDragStart: function(e) {
@@ -61,7 +67,8 @@ L.EditDrag.Polyline = L.Handler.extend({
 
     //set a tollerance of 5
     if (this.closest.distance > 5) {
-      //search the closest segment from the marker
+
+      //locate the closest point on the closest segment
       var distanceMin = Infinity;
       var segmentMin = null;
 
@@ -75,13 +82,10 @@ L.EditDrag.Polyline = L.Handler.extend({
         }
       }
 
-      //locate the closest point on the closest segment
-      var closestPoint = L.GeometryUtil.closestOnSegment(this._map, marker.getLatLng(), segmentMin[0], segmentMin[1]);
-
-      var insertAt = this._poly._latlngs.indexOf(segmentMin[0])+1;
-
-      this._poly._latlngs.splice(insertAt, 0, closestPoint);
-      this.closest = closestPoint;
+      this.closest = L.GeometryUtil.closestOnSegment(this._map, marker.getLatLng(), segmentMin[0], segmentMin[1]);
+      //add a new vertex
+      var insertAt = this._poly._latlngs.indexOf(segmentMin[1]);
+      this._poly._latlngs.splice(insertAt, 0, this.closest);
     }
 
     this._poly.off('mousemove');
