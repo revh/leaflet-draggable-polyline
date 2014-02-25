@@ -104,7 +104,7 @@ L.EditDrag.Polyline = L.Handler.extend({
         return;
     }
 
-    //set a tollerance of 5
+    //check the tollerance
     if (this.closest.distance > this.options.tollerance) {
 
       if (this.options.vertices.insert == false) {
