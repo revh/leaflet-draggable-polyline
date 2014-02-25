@@ -56,7 +56,7 @@ L.EditDrag.Polyline = L.Handler.extend({
   _mouseContextClick: function(e) {
     var closest = L.GeometryUtil.closest(this._map, this._poly, e.latlng, true);
 
-    if (closest.distance < this.options.tollerance) {
+    if (this.options.vertices.destroy !== false && closest.distance < this.options.tollerance) {
       this._poly.spliceLatLngs(this._poly._latlngs.indexOf(closest), 1);
       this._map.removeLayer(this._marker);
       this._marker = null;
@@ -85,41 +85,45 @@ L.EditDrag.Polyline = L.Handler.extend({
     }
   },
 
-  _disableDrag: function() {
-    this.closest = null;
-    this._marker.options.draggable = false;
+  _isInvalidDrag: function(index) {
+    var maxIndex = (this._poly._latlngs.length - 1);
+
+    if ((this.options.vertices.first === false && index == 0) ||
+        (this.options.vertices.last === false && index == maxIndex) ||
+        (this.options.vertices.middle === false && (index > 0 && index < maxIndex))) {
+      return true;
+    }
+
+    if ((this.options.vertices.middle === false || this.options.vertices.insert === false) && index === -1) {
+      return true;
+    }
+
+    return false;
   },
 
   _markerDragStart: function(e) {
     var latlng = e.target.getLatLng();
 
     this.closest = L.GeometryUtil.closest(this._map, this._poly, latlng, true);
-    var index = this._poly._latlngs.indexOf(this.closest);
-    var maxIndex = (this._poly._latlngs.length - 1);
-
-    if (this.options.vertices.first === false && index == 0) {
-      this._disableDrag();
-      return;
-    }
-    if (this.options.vertices.last === false && index == maxIndex) {
-      this._disableDrag();
-      return;
-    }
-
-    if (this.options.vertices.middle === false && (index > 0 && index < maxIndex)) {
-      this._disableDrag();
-      return;
-    }
 
     //check the tollerance
-    if (this.closest.distance > this.options.tollerance) {
+    if (this.closest.distance < this.options.tollerance) {
+      var index = this._poly._latlngs.indexOf(this.closest);
 
-      if (this.options.vertices.insert == false) {
-        this._disableDrag();
-        return;
+      if (this._isInvalidDrag(index)) {
+        this.closest = null;
+        this._marker.options.draggable = false;
       }
 
+    } else {
       this.closest = this._getClosestPointAndSegment(latlng);
+      var index = this._poly._latlngs.indexOf(this.closest);
+
+      if (this._isInvalidDrag(index)) {
+        this.closest = null;
+        this._marker.options.draggable = false;
+        return;
+      }
 
       //add a new vertex
       var insertAt = this._poly._latlngs.indexOf(this.closest.segment[1]);

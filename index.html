@@ -27,10 +27,6 @@
 
     var coordinates = [
       [45.2750072361, 13.7187695503],
-      [45.2757622049, 13.7198746204],
-      [45.2763963762, 13.7197780609],
-      [45.2787216541, 13.7263333797],
-      [45.2787216812, 13.72808218],
       [45.2776703394, 13.7291487239],
       [45.2746230524, 13.7283730778],
       [45.2739752209, 13.727448813],
@@ -44,12 +40,12 @@
       [45.2744277756, 13.7251200459],
       [45.2747125506, 13.7229381908],
       [45.2746349263, 13.7213142352],
-      [45.2749326769, 13.7207699906],
-      [45.2756791761, 13.7202823162]
+      [45.2749326769, 13.7207699906]
     ];
 
+
     //only middle vertices are draggable but don't add new vertices
-    //var polyline = L.polyline(coordinates, { edit_with_drag: true, vertices: { first: false, last: false, middle: true, insert: false } }).addTo(map);
+    //var polyline = L.polyline(coordinates, { edit_with_drag: true, vertices: { first: false, last: false, middle: true }}).addTo(map);
 
     var polyline = L.polyline(coordinates, { edit_with_drag: true }).addTo(map);
 
