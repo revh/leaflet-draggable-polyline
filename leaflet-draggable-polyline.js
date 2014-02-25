@@ -5,11 +5,11 @@ L.EditDrag.Polyline = L.Handler.extend({
   options: {
     distance: 30,   //distance from pointer to the polyline
     tollerance: 5,  //tollerance for snap effect to vertex
-    draggables: {
-      first: true,      //first vertex is draggable
-      middle: true,     //middle vertices are draggables
-      last: true,       //last vertex draggable
-      add_vertex: true  //define if the number of polyline's vertices can change
+    vertices: {
+      //first: true,  //first vertex is draggable
+      //middle: true, //middle vertices are draggables
+      //last: true,   //last vertex draggable
+      //insert: true, //define if the number of polyline's vertices can change
     },
     icon: new L.DivIcon({
       iconSize: new L.Point(8, 8),
@@ -41,7 +41,7 @@ L.EditDrag.Polyline = L.Handler.extend({
     var distanceMin = Infinity;
     var segmentMin = null;
 
-    for (var i = 0, len = (this._poly._latlngs.length -1); i < len; i++) {
+    for (var i = 0, len = (this._poly._latlngs.length - 1); i < len; i++) {
       var segment = [ this._poly._latlngs[i], this._poly._latlngs[i + 1] ];
       var distance = L.GeometryUtil.distanceSegment(this._map, latlng, segment[0], segment[1]);
       if (distance < distanceMin) {
@@ -93,11 +93,11 @@ L.EditDrag.Polyline = L.Handler.extend({
 
     this.closest = L.GeometryUtil.closest(this._map, this._poly, latlng, true);
     var index = this._poly._latlngs.indexOf(this.closest);
-    var polylength = this._poly._latlngs.length;
+    var maxIndex = (this._poly._latlngs.length - 1);
 
-    if ((!this.options.draggables.first && index == 0) ||
-        (!this.options.draggables.last && index == (polylength -1)) ||
-        (!this.options.draggables.middle && (index > 0 && index < (polylength - 1)))) {
+    if ((this.options.vertices.first === false && index == 0) ||
+        (this.options.vertices.last === false && index == maxIndex) ||
+        (this.options.vertices.middle === false && (index > 0 && index < maxIndex))) {
         this._disableDrag();
         return;
     }
@@ -105,7 +105,7 @@ L.EditDrag.Polyline = L.Handler.extend({
     //set a tollerance of 5
     if (this.closest.distance > this.options.tollerance) {
 
-      if (!this.options.draggables.add_vertex) {
+      if (this.options.vertices.insert == false) {
         this._disableDrag();
         return;
       }

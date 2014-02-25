@@ -48,7 +48,8 @@
       [45.2756791761, 13.7202823162]
     ];
 
-    //var polyline = L.polyline(coordinates, { edit_with_drag: true, draggables: { first: true, last: true, middle: true, add_vertex: true } }).addTo(map);
+    //only middle vertices are draggable but don't add new vertices
+    //var polyline = L.polyline(coordinates, { edit_with_drag: true, vertices: { first: false, last: false, middle: true, insert: false } }).addTo(map);
 
     var polyline = L.polyline(coordinates, { edit_with_drag: true }).addTo(map);
 
