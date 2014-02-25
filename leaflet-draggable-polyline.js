@@ -97,11 +97,18 @@ L.EditDrag.Polyline = L.Handler.extend({
     var index = this._poly._latlngs.indexOf(this.closest);
     var maxIndex = (this._poly._latlngs.length - 1);
 
-    if ((this.options.vertices.first === false && index == 0) ||
-        (this.options.vertices.last === false && index == maxIndex) ||
-        (this.options.vertices.middle === false && (index > 0 && index < maxIndex))) {
-        this._disableDrag();
-        return;
+    if (this.options.vertices.first === false && index == 0) {
+      this._disableDrag();
+      return;
+    }
+    if (this.options.vertices.last === false && index == maxIndex) {
+      this._disableDrag();
+      return;
+    }
+
+    if (this.options.vertices.middle === false && (index > 0 && index < maxIndex)) {
+      this._disableDrag();
+      return;
     }
 
     //check the tollerance
