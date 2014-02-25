@@ -58,6 +58,8 @@ L.EditDrag.Polyline = L.Handler.extend({
 
     if (closest.distance < this.options.tollerance) {
       this._poly.spliceLatLngs(this._poly._latlngs.indexOf(closest), 1);
+      this._map.removeLayer(this._marker);
+      this._marker = null;
     }
   },
 
