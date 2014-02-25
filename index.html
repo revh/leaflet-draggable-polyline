@@ -14,28 +14,41 @@
   </style>
 </head>
 <body>
+
+  <h1>Simple</h1>
+  <p>The green polyline can be edited by dragging its vertices. Destroy a vertex with the rightclick</p>
+  <p>The red polyline can't drag the <strong>first</strong> and the <strong>last</strong> vertices</p>
   <div id="map" style="width: 300px; height: 300px"></div>
 
-  <script>
-    var map = L.map("map", {
+  <h1>Option</h1>
+  <pre>
+  edit_drag: true/false - enable disable the plugin over the polyline
 
-    });
+  vertices: {
+      first: true/false
+      last: true/false
+      middle: true/false
+      insert: true/false
+      destroy: true/false
+  }
+  </pre>
+
+  <script>
+    var map = L.map("map");
 
     var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib='Map data © OpenStreetMap contributors';
     L.tileLayer(osmUrl, {minZoom: 0, maxZoom: 15, attribution: osmAttrib}).addTo(map);
 
-    var coordinates = [
-      [45.2750072361, 13.7187695503],
+    var coordinates1 = [
+      [45.2766983957207, 13.720893859863281],
+      [45.27778554315248, 13.724026679992674],
       [45.2776703394, 13.7291487239],
-      [45.2746230524, 13.7283730778],
-      [45.2739752209, 13.727448813],
-      [45.2735003071, 13.7272656303],
-      [45.2732175518, 13.7276246501],
-      [45.2721955264, 13.7278538799],
-      [45.2714755129, 13.7272248028],
-      [45.2717871648, 13.7257949873],
-      [45.2728658637, 13.7252000246],
+      [45.2746230524, 13.7283730778]
+    ];
+
+    var coordinates2 = [
+
       [45.2737827215, 13.7252887813],
       [45.2744277756, 13.7251200459],
       [45.2747125506, 13.7229381908],
@@ -43,13 +56,10 @@
       [45.2749326769, 13.7207699906]
     ];
 
+    var polyline1 = L.polyline(coordinates1, { color: '#00ff00', edit_with_drag: true  }).addTo(map);
+    var polyline2 = L.polyline(coordinates2, { color: '#ff0000', edit_with_drag: true, vertices: { first: false, last: false, middle: true, insert: true, destroy: true }  }).addTo(map);
 
-    //only middle vertices are draggable but don't add new vertices
-    //var polyline = L.polyline(coordinates, { edit_with_drag: true, vertices: { first: false, last: false, middle: true }}).addTo(map);
-
-    var polyline = L.polyline(coordinates, { edit_with_drag: true }).addTo(map);
-
-    map.fitBounds(polyline.getBounds());
+    map.fitBounds(polyline1.getBounds());
   </script>
 </body>
 </html>
