@@ -3,7 +3,7 @@
 <head>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
   <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
-  <script src="leaflet.geometryutil.js"></script>
+  <script src="app/bower_components/leaflet.geometryutil/dist/leaflet.geometryutil.js"></script>
   <script src="leaflet-draggable-polyline.js"></script>
   <style>
     .leaflet-div-icon {
@@ -14,13 +14,13 @@
   </style>
 </head>
 <body>
-
-  <h1>Simple</h1>
+	
+	<h1>Leaflet draggable polyline</h1>
   <p>The green polyline can be edited by dragging its vertices. Destroy a vertex with the rightclick</p>
   <p>The red polyline can't drag the <strong>first</strong> and the <strong>last</strong> vertices</p>
   <div id="map" style="width: 300px; height: 300px"></div>
 
-  <h1>Option</h1>
+  <h1>Options</h1>
   <pre>
   edit_drag: true/false - enable disable the plugin over the polyline
 
