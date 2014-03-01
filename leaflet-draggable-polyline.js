@@ -57,7 +57,12 @@ L.EditDrag.Polyline = L.Handler.extend({
     var closest = L.GeometryUtil.closest(this._map, this._poly, e.latlng, true);
 
     if (this.options.vertices.destroy !== false && closest.distance < this.options.tollerance) {
-      this._poly.spliceLatLngs(this._poly._latlngs.indexOf(closest), 1);
+      var index = this._poly._latlngs.indexOf(closest);
+      var maxIndex = (this._poly._latlngs.length - 1);
+      if ((this.options.vertices.first === false && index == 0) || (this.options.vertices.last === false && index == maxIndex)) {
+        return;
+      }
+      this._poly.spliceLatLngs(index, 1);
       this._map.removeLayer(this._marker);
       this._marker = null;
     }
