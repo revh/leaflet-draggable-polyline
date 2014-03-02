@@ -3,7 +3,7 @@ L.EditDrag = L.EditDrag || {};
 L.EditDrag.Polyline = L.Handler.extend({
 
   options: {
-    distance: 30,   //distance from pointer to the polyline
+    distance: 20,   //distance from pointer to the polyline
     tollerance: 5,  //tollerance for snap effect to vertex
     vertices: {
       //first: true,  //first vertex is draggable
@@ -20,6 +20,7 @@ L.EditDrag.Polyline = L.Handler.extend({
   initialize: function(poly) {
     this._poly = poly;
     this._marker = null;
+    this._dragging = false;
     L.Util.setOptions(this, poly.options);
   },
 
@@ -69,6 +70,8 @@ L.EditDrag.Polyline = L.Handler.extend({
   },
 
   _mouseMove: function(e) {
+    if (this._dragging) return;
+
     var closest = L.GeometryUtil.closestLayerSnap(this._map, [this._poly], e.latlng, this.options.distance, false);
 
     if (this._marker && closest) {
@@ -110,7 +113,7 @@ L.EditDrag.Polyline = L.Handler.extend({
     var latlng = e.target.getLatLng();
 
     this.closest = L.GeometryUtil.closest(this._map, this._poly, latlng, true);
-
+    this._dragging = true;
     //check the tollerance
     if (this.closest.distance < this.options.tollerance) {
       var index = this._poly._latlngs.indexOf(this.closest);
@@ -134,8 +137,6 @@ L.EditDrag.Polyline = L.Handler.extend({
       var insertAt = this._poly._latlngs.indexOf(this.closest.segment[1]);
       this._poly._latlngs.splice(insertAt, 0, this.closest);
     }
-
-    this._map.off('mousemove');
   },
 
   _markerDrag: function(e) {
@@ -147,7 +148,7 @@ L.EditDrag.Polyline = L.Handler.extend({
   },
 
   _markerDragEnd: function(e) {
-    this._map.on('mousemove', this._mouseMove, this);
+    this._dragging = false;
   }
 });
 
