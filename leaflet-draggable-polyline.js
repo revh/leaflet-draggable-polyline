@@ -135,7 +135,7 @@ L.EditDrag.Polyline = L.Handler.extend({
       this._poly._latlngs.splice(insertAt, 0, this.closest);
     }
 
-    this._poly.off('mousemove');
+    this._map.off('mousemove');
   },
 
   _markerDrag: function(e) {
